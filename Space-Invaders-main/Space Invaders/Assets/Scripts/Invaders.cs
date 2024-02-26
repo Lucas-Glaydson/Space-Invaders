@@ -116,33 +116,41 @@ public class InvadersGrid : MonoBehaviour
     }
 
     private void OnInvaderKilled(int row)
+{
+    _audioSource.PlayOneShot(this.deathSound);
+
+    amountKilled++;
+
+    switch(row)
     {
-        _audioSource.PlayOneShot(this.deathSound);
-
-        amountKilled++;
-
-        switch(row)
-        {
-            case 4:
-                score += 40;
-                break;
-            case 3:
-            case 2:
-                score += 20;
-                break;
-            case 1:
-            case 0:
-                score += 10;
-                break;
-        }
-
-        UpdateScore(score);
-
-        if (this.amountKilled >= this.totalInvaders)
-        {   
-            ResetInvaders();
-        }
+        case 4:
+            score += 40;
+            break;
+        case 3:
+        case 2:
+            score += 20;
+            break;
+        case 1:
+        case 0:
+            score += 10;
+            break;
     }
+
+    UpdateScore(score);
+
+    if (this.amountKilled >= this.totalInvaders)
+    {   
+        ResetInvaders();
+    }
+    else if (this.amountKilled % this.totalInvaders == 0)
+    {
+        ResetInvaders();
+    }
+     else if (this.amountKilled >= this.totalInvaders-1)
+    {   
+        ResetInvaders();
+    }
+}
 
 
     private void ResetInvaders()
@@ -150,7 +158,7 @@ public class InvadersGrid : MonoBehaviour
     
         this.transform.position = startPosition;
 
-        for (int row = 0; row < rows; row++)
+        for (int row = 0; row < rows ; row++)
         {
             for (int column = 0; column < columns; column++)
             {
@@ -164,6 +172,7 @@ public class InvadersGrid : MonoBehaviour
 
         amountKilled = 0;
         UpdateScore(score);
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
